@@ -114,7 +114,6 @@ void usercontrol(void) {
     turn(user.Axis1.position(pct));
     update_drivetrain();
 
-
     wait(20, msec); // Sleep the task for a short amount of time to
                     // prevent wasted resources.
   }
