@@ -33,6 +33,21 @@ float right_drive_velocity = 0;
 
 // define your global instances of motors and other devices here
 
+void update_drivetrain() {
+  left_drive_motors.setVelocity(left_drive_velocity);
+  right_drive_motors.setVelocity(right_drive_velocity);
+}
+
+void drive(speed : float) {
+  left_drive_velocity += speed;
+  right_drive_velocity += speed;
+}
+
+void turn(speed : float) {
+  left_drive_velocity += speed;
+  right_drive_velocity -= speed;
+}
+
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
 /*                                                                           */
@@ -42,6 +57,7 @@ float right_drive_velocity = 0;
 /*  function is only called once after the V5 has been powered on and        */
 /*  not every time that the robot is disabled.                               */
 /*---------------------------------------------------------------------------*/
+
 
 void pre_auton(void) {
 
@@ -94,11 +110,9 @@ void usercontrol(void) {
     left_drive_velocity = 0;
     right_drive_velocity = 0;
 
-    left_drive_velocity += user.Axis3.position(pct);
-    right_drive_velocity += user.Axis3.position(pct);
-
-    left_drive_motors.setVelocity(left_drive_velocity, pct);
-    right_drive_motors.setVelocity(right_drive_velocity, pct);
+    drive(user.Axis3.position(pct));
+    turn(user.Axis1.position(pct));
+    update_drivetrain();
 
 
     wait(20, msec); // Sleep the task for a short amount of time to
