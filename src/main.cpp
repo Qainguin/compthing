@@ -13,6 +13,7 @@ using namespace vex;
 
 // A global instance of competition
 competition Competition;
+controller Controller;
 
 motor L1 = motor(1);
 motor L2 = motor(2);
