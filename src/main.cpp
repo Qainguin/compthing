@@ -13,19 +13,23 @@ using namespace vex;
 
 // A global instance of competition
 competition Competition;
+controller user;
 
-motor L1 = motor(1);
-motor L2 = motor(2);
-motor L3 = motor(3);
+motor L1 = motor(17, true);
+motor L2 = motor(18, true);
+motor L3 = motor(19, true);
 
-motor R1 = motor(4);
-motor R2 = motor(5);
-motor R3 = motor(6);
+motor R1 = motor(10);
+motor R2 = motor(11);
+motor R3 = motor(12);
 
 motor_group left_drive_motors = motor_group(L1, L2, L3);
 motor_group right_drive_motors = motor_group(R1, R2, R3);
 
 motor_group all_drive_motors = motor_group(L1, L2, L3, R1, R2, R3);
+
+float left_drive_velocity = 0;
+float right_drive_velocity = 0;
 
 // define your global instances of motors and other devices here
 
@@ -45,6 +49,7 @@ void pre_auton(void) {
   // Example: clearing encoders, setting servo positions, ...
 
   all_drive_motors.setStopping(brake);
+  all_drive_motors.spin(forward);
 
 }
 
@@ -85,6 +90,16 @@ void usercontrol(void) {
     // Insert user code here. This is where you use the joystick values to
     // update your motors, etc.
     // ........................................................................
+
+    left_drive_velocity = 0;
+    right_drive_velocity = 0;
+
+    left_drive_velocity += user.Axis3.position(pct);
+    right_drive_velocity += user.Axis3.position(pct);
+
+    left_drive_motors.setVelocity(left_drive_velocity, pct);
+    right_drive_motors.setVelocity(right_drive_velocity, pct);
+
 
     wait(20, msec); // Sleep the task for a short amount of time to
                     // prevent wasted resources.
