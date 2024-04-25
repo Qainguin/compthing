@@ -15,10 +15,17 @@ using namespace vex;
 competition Competition;
 controller user;
 
+// define your global instances of motors and other devices here
+
+const float wheel_diameter = 3.25; // Diameter of wheels
+const float track_width = 16; // Distance betweeen left and right wheels
+
+// L = 17, 18, 19
 motor L1 = motor(17, true);
 motor L2 = motor(18, true);
 motor L3 = motor(19, true);
 
+// R = 10, 11, 12
 motor R1 = motor(10);
 motor R2 = motor(11);
 motor R3 = motor(12);
@@ -28,24 +35,40 @@ motor_group right_drive_motors = motor_group(R1, R2, R3);
 
 motor_group all_drive_motors = motor_group(L1, L2, L3, R1, R2, R3);
 
+// Drive Velocities
 float left_drive_velocity = 0;
 float right_drive_velocity = 0;
 
-// define your global instances of motors and other devices here
 
+// User Driving Functions
 void update_drivetrain() {
   left_drive_motors.setVelocity(left_drive_velocity);
   right_drive_motors.setVelocity(right_drive_velocity);
 }
 
-void drive(speed : float) {
+void drive(speed : int = 0) {
   left_drive_velocity += speed;
   right_drive_velocity += speed;
 }
 
-void turn(speed : float) {
+void turn(speed : int = 0) {
   left_drive_velocity += speed;
   right_drive_velocity -= speed;
+}
+
+// Autonomous Driving Functions
+void auton_drive(time : float = 0.5, speed : int = 100) {
+  left_drive_velocity = speed
+  right_drive_velocity = speed
+  update_drivetrain()
+  wait(time)
+}
+
+void auton_turn(time : int = 0.5, speed : int = 100) {
+  left_drive_velocity = speed
+  right_drive_velocity = -speed
+  update_drivetrain()
+  wait(time)
 }
 
 /*---------------------------------------------------------------------------*/
@@ -63,6 +86,7 @@ void pre_auton(void) {
 
   // All activities that occur before the competition starts
   // Example: clearing encoders, setting servo positions, ...
+
 
   all_drive_motors.setStopping(brake);
   all_drive_motors.spin(forward);
@@ -83,6 +107,9 @@ void autonomous(void) {
   // ..........................................................................
   // Insert autonomous user code here.
   // ..........................................................................
+
+  auton_drive(0.5)
+  auton_turn(0.5)
 }
 
 /*---------------------------------------------------------------------------*/
