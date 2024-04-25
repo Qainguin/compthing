@@ -48,6 +48,12 @@ void update_drivetrain() {
   right_drive_motors.setVelocity(right_drive_velocity, pct);
 }
 
+void reset_drivetrain() {
+  left_drive_velocity = 0;
+  right_drive_velocity = 0;
+  update_drivetrain();
+}
+
 void drive(int speed = 0) {
   left_drive_velocity += speed;
   right_drive_velocity += speed;
@@ -64,6 +70,7 @@ void auton_drive(float time = 0.4, int speed = 100) {
   right_drive_velocity = speed;
   update_drivetrain();
   wait(time, sec);
+  reset_drivetrain();
 }
 
 void auton_turn(float target_rotation = 90.0) {
@@ -72,9 +79,7 @@ void auton_turn(float target_rotation = 90.0) {
   right_drive_velocity = -speed;
   update_drivetrain();
   wait(target_rotation / 240, sec);
-  left_drive_velocity = 0;
-  right_drive_velocity = 0;
-  update_drivetrain();
+  reset_drivetrain();
 }
 
 // This function runs before the autonomous period.
@@ -95,7 +100,10 @@ void autonomous(void) {
   // ..........................................................................
 
   auton_drive();
-  auton_turn();
+  auton_turn(90);
+  wait(50, msec);
+  auton_drive();
+  auton_turn(-90);
 }
 
 void usercontrol(void) {
