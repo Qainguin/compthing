@@ -3,7 +3,7 @@
 /*    Module:       main.cpp                                                  */
 /*    Author:       vcs                                                       */
 /*    Created:      4/23/2024, 2:27:03 PM                                     */
-/*    Description:  V5 project                                                */
+/*    Description:  Code for 2024-2025 VEX Robotics Season                    */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
@@ -19,6 +19,9 @@ controller user;
 
 const float wheel_diameter = 3.25; // Diameter of wheels
 const float track_width = 16; // Distance betweeen left and right wheels
+
+const int drivetrain_rpm = 200; // RPM of drivetrain
+const int drivetrain_gear_ratio = 18;
 
 // L = 17, 18, 19
 motor L1 = motor(17, true);
@@ -39,36 +42,39 @@ motor_group all_drive_motors = motor_group(L1, L2, L3, R1, R2, R3);
 float left_drive_velocity = 0;
 float right_drive_velocity = 0;
 
-
 // User Driving Functions
 void update_drivetrain() {
-  left_drive_motors.setVelocity(left_drive_velocity);
-  right_drive_motors.setVelocity(right_drive_velocity);
+  left_drive_motors.setVelocity(left_drive_velocity, pct);
+  right_drive_motors.setVelocity(right_drive_velocity, pct);
 }
 
-void drive(speed : int = 0) {
+void drive(int speed = 0) {
   left_drive_velocity += speed;
   right_drive_velocity += speed;
 }
 
-void turn(speed : int = 0) {
+void turn(int speed = 0) {
   left_drive_velocity += speed;
   right_drive_velocity -= speed;
 }
 
 // Autonomous Driving Functions
-void auton_drive(time : float = 0.5, speed : int = 100) {
-  left_drive_velocity = speed
-  right_drive_velocity = speed
-  update_drivetrain()
-  wait(time)
+void auton_drive(float time = 0.4, int speed = 100) {
+  left_drive_velocity = speed;
+  right_drive_velocity = speed;
+  update_drivetrain();
+  wait(time, sec);
 }
 
-void auton_turn(time : int = 0.5, speed : int = 100) {
-  left_drive_velocity = speed
-  right_drive_velocity = -speed
-  update_drivetrain()
-  wait(time)
+void auton_turn(float target_rotation = 90.0) {
+  int speed = 100;
+  left_drive_velocity = speed;
+  right_drive_velocity = -speed;
+  update_drivetrain();
+  wait(target_rotation / 240, sec);
+  left_drive_velocity = 0;
+  right_drive_velocity = 0;
+  update_drivetrain();
 }
 
 /*---------------------------------------------------------------------------*/
@@ -86,7 +92,6 @@ void pre_auton(void) {
 
   // All activities that occur before the competition starts
   // Example: clearing encoders, setting servo positions, ...
-
 
   all_drive_motors.setStopping(brake);
   all_drive_motors.spin(forward);
@@ -108,8 +113,8 @@ void autonomous(void) {
   // Insert autonomous user code here.
   // ..........................................................................
 
-  auton_drive(0.5)
-  auton_turn(0.5)
+  auton_drive();
+  auton_turn();
 }
 
 /*---------------------------------------------------------------------------*/
@@ -124,6 +129,8 @@ void autonomous(void) {
 
 void usercontrol(void) {
   // User control code here, inside the loop
+  autonomous();
+
   while (1) {
     // This is the main execution loop for the user control program.
     // Each time through the loop your program should update motor + servo
