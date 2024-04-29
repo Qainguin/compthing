@@ -17,11 +17,17 @@ controller user;
 
 // define your global instances of motors and other devices here
 
-const float wheel_diameter = 3.25; // Diameter of wheels
-const float track_width = 16; // Distance betweeen left and right wheels
+// Diameter of wheels
+const float WHEEL_DIAMETER = 3.25; 
+// Circumference of wheels
+const float WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * 3.1416; 
+// Distance between top-left wheel and bottom-right wheel
+const float TURNING_DIAMETER = 19.0;
 
-const int drivetrain_rpm = 200; // RPM of drivetrain
-const int drivetrain_gear_ratio = 18;
+// RPM of drivetrain
+const int RPM = 200;
+// Gear ratio of drivetrain
+const int GEAR_RATIO = 18;
 
 // L = 17, 18, 19
 motor L1 = motor(17, true);
@@ -65,21 +71,19 @@ void turn(int speed = 0) {
 }
 
 // Autonomous Driving Functions
-void auton_drive(float time = 0.4, int speed = 100) {
-  left_drive_velocity = speed;
-  right_drive_velocity = speed;
-  update_drivetrain();
-  wait(time, sec);
-  reset_drivetrain();
+void auton_drive(float inches = 4, int speed = 50) {
+  float inches_per_degree = wheel_circumference / 360;
+  float degrees = inches / inches_per_degree;
+
+  all_drive_motors.spinFor(degrees * GEAR_RATIO, deg, speed, pct);
 }
 
-void auton_turn(float target_rotation = 90.0) {
-  int speed = 100;
-  left_drive_velocity = speed;
-  right_drive_velocity = -speed;
-  update_drivetrain();
-  wait(target_rotation / 240, sec);
-  reset_drivetrain();
+void auton_turn(float degrees = 90.0, int speed = 50) {
+  float turning_ratio = TURNING_DIAMETER / WHEEL_DIAMETER;
+  float wheel_degrees = turning_ratio * degrees;
+
+  left_drive_motors.spinFor(wheel_degrees * GEAR_RATIO / 2, deg, speed, pct);
+  right_drive_motors.spinFor(wheel_degrees * GEAR_RATIO / 2, deg, -speed, pct);
 }
 
 // This function runs before the autonomous period.
