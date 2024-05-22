@@ -24,4 +24,4 @@ jobs:
 
     - name: Build VEX C++ project
       run: |
-        g++ 6MDrivecode/src/*.cpp -I6MDrivecode/include -Ivexv5/.h -o compthing  # Compile all .cpp files in src directory
+        g++ 6MDrivecode/src/*.cpp -I6MDrivecode/include -Ivexv5/*.h -o compthing  # Compile all .cpp files in src directory
