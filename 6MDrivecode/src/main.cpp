@@ -29,6 +29,12 @@ const int RPM = 200;
 // Gear ratio of drivetrain
 const int GEAR_RATIO = 18;
 
+
+// Speed values
+const int QUARTER_SPEED = 25;
+const int HALF_SPEED = 50;
+const int FULL_SPEED = 100;
+
 // L = 17, 18, 19
 motor L1 = motor(17, true);
 motor L2 = motor(18, true);
@@ -54,36 +60,25 @@ void update_drivetrain() {
   right_drive_motors.setVelocity(right_drive_velocity, pct);
 }
 
-void reset_drivetrain() {
+// Resets the drive velocities to 0.
+void reset(bool update = false) {
   left_drive_velocity = 0;
   right_drive_velocity = 0;
-  update_drivetrain();
+  if update {
+    update_drivetrain();
+  }
 }
 
+// Sets drive velocities to the given speed parameter.
 void drive(int speed = 0) {
   left_drive_velocity += speed;
   right_drive_velocity += speed;
 }
 
+// Sets the left drive velocity to the speed variable and the right drive velocity to the opposite of speed.
 void turn(int speed = 0) {
   left_drive_velocity += speed;
   right_drive_velocity -= speed;
-}
-
-// Autonomous Driving Functions
-void auton_drive(float inches = 4, int speed = 50) {
-  float inches_per_degree = wheel_circumference / 360;
-  float degrees = inches / inches_per_degree;
-
-  all_drive_motors.spinFor(degrees * GEAR_RATIO, deg, speed, pct);
-}
-
-void auton_turn(float degrees = 90.0, int speed = 50) {
-  float turning_ratio = TURNING_DIAMETER / WHEEL_DIAMETER;
-  float wheel_degrees = turning_ratio * degrees;
-
-  left_drive_motors.spinFor(wheel_degrees * GEAR_RATIO / 2, deg, speed, pct);
-  right_drive_motors.spinFor(wheel_degrees * GEAR_RATIO / 2, deg, -speed, pct);
 }
 
 // This function runs before the autonomous period.
@@ -103,11 +98,9 @@ void autonomous(void) {
   // Insert autonomous user code here.
   // ..........................................................................
 
-  auton_drive();
-  auton_turn(90);
-  wait(50, msec);
-  auton_drive();
-  auton_turn(-90);
+  drive(FULL_SPEED);
+  wait(200, msec);
+  reset(true);
 }
 
 void usercontrol(void) {
@@ -124,11 +117,10 @@ void usercontrol(void) {
     // update your motors, etc.
     // ........................................................................
 
-    left_drive_velocity = 0;
-    right_drive_velocity = 0;
-
+    reset()
     drive(user.Axis3.position(pct));
     turn(user.Axis1.position(pct));
+
     update_drivetrain();
 
     wait(20, msec); // Sleep the task for a short amount of time to
