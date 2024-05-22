@@ -1,9 +1,9 @@
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*    Module:       main.cpp                                                  */
-/*    Author:       vcs                                                       */
+/*    Author:       Justin Lopez                                              */
 /*    Created:      4/23/2024, 2:27:03 PM                                     */
-/*    Description:  Code for 2024-2025 VEX Robotics Season                    */
+/*    Description:  Code for 2024-2025 VRC High Stakes                        */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
@@ -50,36 +50,37 @@ motor_group right_drive_motors = motor_group(R1, R2, R3);
 
 motor_group all_drive_motors = motor_group(L1, L2, L3, R1, R2, R3);
 
-// Drive Velocities
-float left_drive_velocity = 0;
-float right_drive_velocity = 0;
+drivetrain robot = drivetrain(left_drive_motors, right_drive_motors);
 
-// User Driving Functions
-void update_drivetrain() {
-  left_drive_motors.setVelocity(left_drive_velocity, pct);
-  right_drive_motors.setVelocity(right_drive_velocity, pct);
-}
+float drive_velocity = 0;
+
+
 
 // Resets the drive velocities to 0.
-void reset(bool update = false) {
-  left_drive_velocity = 0;
-  right_drive_velocity = 0;
-  if update {
-    update_drivetrain();
-  }
+void reset() {
+  robot.setDriveVelocity(0, pct);
+  robot.setTurnVelocity(0, pct);
 }
 
 // Sets drive velocities to the given speed parameter.
 void drive(int speed = 0) {
-  left_drive_velocity += speed;
-  right_drive_velocity += speed;
+  robot.drive(fwd, speed, pct);
 }
 
 // Sets the left drive velocity to the speed variable and the right drive velocity to the opposite of speed.
 void turn(int speed = 0) {
-  left_drive_velocity += speed;
-  right_drive_velocity -= speed;
+  robot.turn(right, speed, pct);
 }
+
+
+void auton_drive(float inches = 0, float speed = FULL_SPEED) {
+  robot.driveFor(inches, in, speed, pct);
+}
+
+void auton_turn(float degrees = 0, float speed = FULL_SPEED) {
+  robot.turnFor(degrees, deg, speed, pct);
+}
+
 
 // This function runs before the autonomous period.
 
@@ -88,9 +89,7 @@ void pre_auton(void) {
   // All activities that occur before the competition starts
   // Example: clearing encoders, setting servo positions, ...
 
-  all_drive_motors.setStopping(brake);
-  all_drive_motors.spin(forward);
-
+  robot.setStopping(brake);
 }
 
 void autonomous(void) {
@@ -100,7 +99,7 @@ void autonomous(void) {
 
   drive(FULL_SPEED);
   wait(200, msec);
-  reset(true);
+  reset();
 }
 
 void usercontrol(void) {
@@ -120,8 +119,6 @@ void usercontrol(void) {
     reset()
     drive(user.Axis3.position(pct));
     turn(user.Axis1.position(pct));
-
-    update_drivetrain();
 
     wait(20, msec); // Sleep the task for a short amount of time to
                     // prevent wasted resources.
