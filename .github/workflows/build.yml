@@ -1,0 +1,22 @@
+name: Build VEX C++ Project
+
+on:
+  push:
+    branches:
+      - main  # Adjust the branch name as needed
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install g++
+      run: sudo apt-get install -y g++
+
+    - name: Build VEX C++ project
+      run: |
+        cd ~/6MDrivecode
+        g++ src/*.cpp -o <output_executable_name>  # Compile all .cpp files in src directory
