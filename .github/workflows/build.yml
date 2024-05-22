@@ -24,4 +24,4 @@ jobs:
 
     - name: Build VEX C++ project
       run: |
-        g++ src/*.cpp -o <output_executable_name>  # Compile all .cpp files in src directory
+        g++ src/*.cpp -o compthing  # Compile all .cpp files in src directory
