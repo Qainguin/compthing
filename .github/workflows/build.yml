@@ -16,9 +16,12 @@ jobs:
     - name: Install g++
       run: sudo apt-get install -y g++
 
+    - name: Create project directory
+      run: mkdir -p ~/6MDrivecode
+
+    - name: Change to project directory
+      run: cd ~/6MDrivecode
+
     - name: Build VEX C++ project
       run: |
-        mkdir -p ~/6MDrivecode
-        cd ~/6MDrivecode
         g++ src/*.cpp -o <output_executable_name>  # Compile all .cpp files in src directory
-        
