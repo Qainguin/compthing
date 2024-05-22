@@ -13,6 +13,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    - name: Make directory
+    - run: mkdir -p ~/6MDrivecode
+
     - name: Install g++
       run: sudo apt-get install -y g++
 
