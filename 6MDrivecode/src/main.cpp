@@ -18,15 +18,6 @@ controller user;
 
 // define your global instances of motors and other devices here
 
-
-// Diameter of wheels
-const float WHEEL_DIAMETER = 3.25; 
-
-// RPM of drivetrain
-const int RPM = 200;
-// Gear ratio of drivetrain
-const int GEAR_RATIO = 18;
-
 float drive_velocity = 0;
 
 // This function runs before the autonomous period.
