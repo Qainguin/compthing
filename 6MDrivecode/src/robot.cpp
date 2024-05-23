@@ -1,7 +1,6 @@
 #include "vex.h"
 #include "robot.h"
 
-
 // Speed values
 const int QUARTER_SPEED = 25;
 const int HALF_SPEED = 50;
@@ -20,8 +19,6 @@ vex::motor R3 = vex::motor(12);
 vex::motor_group left_drive_motors = vex::motor_group(L1, L2, L3);
 vex::motor_group right_drive_motors = vex::motor_group(R1, R2, R3);
 
-vex::motor_group all_drive_motors = vex::motor_group(L1, L2, L3, R1, R2, R3);
-
 vex::drivetrain robot = vex::drivetrain(left_drive_motors, right_drive_motors);
 
 // Function that resets the drive velocities to 0.
@@ -30,26 +27,27 @@ void reset() {
   robot.setTurnVelocity(0, vex::pct);
 }
 
-// Function to drive the robot at a certain speed for a certain duration
+// Function to drive the robot at a certain speed
 void drive(int speed) {
-    robot.setDriveVelocity(speed, vex::velocityUnits::pct);
-    robot.drive(vex::directionType::fwd);
+  robot.setDriveVelocity(speed, vex::velocityUnits::pct);
+  robot.drive(vex::directionType::fwd);
 }
 
 // Function to turn the robot by a certain angle at a certain speed
 void turn(int speed) {
-    robot.setTurnVelocity(speed, vex::velocityUnits::pct);
-    robot.turn(vex::right, speed, vex::velocityUnits::pct);
+  robot.setTurnVelocity(speed, vex::velocityUnits::pct);
+  robot.turn(vex::right, speed, vex::velocityUnits::pct);
 }
 
 // Function to autonomously drive a certain distance at a certain speed
-void auton_drive(float speed = FULL_SPEED, float distance = 1.0) {
-    robot.setDriveVelocity(speed, vex::velocityUnits::pct);
-    robot.driveFor(distance, vex::distanceUnits::in);
+void auton_drive(double distance, double speed) {
+  float dist = static_cast<float>(distance);  // Convert to float if needed
+  robot.setDriveVelocity(speed, vex::velocityUnits::pct);
+  robot.driveFor(dist, vex::distanceUnits::in);
 }
 
 // Function to autonomously turn the robot by a certain angle
-void auton_turn(float angle = 90) {
-    robot.setTurnVelocity(50, vex::velocityUnits::pct); // Assuming a default speed of 50%
-    robot.turnFor(angle, vex::rotationUnits::deg);
+void auton_turn(double angle) {
+  robot.setTurnVelocity(50, vex::velocityUnits::pct);  // Assuming a default speed of 50%
+  robot.turnFor(angle, vex::rotationUnits::deg);
 }

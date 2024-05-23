@@ -7,8 +7,8 @@
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
-#include "robot.h"
 #include "vex.h"
+#include "robot.h"
 
 using namespace vex;
 
@@ -27,7 +27,7 @@ void pre_auton(void) {
 }
 
 void autonomous(void) {
-  drive(FULL_SPEED);
+  auton_drive(1.0, 100);
   wait(200, msec);
   reset();
 }
