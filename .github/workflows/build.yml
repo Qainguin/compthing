@@ -3,25 +3,25 @@ name: Build VEX C++ Project
 on:
   push:
     branches:
-      - main  # Adjust the branch name as needed
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Install g++
-      run: sudo apt-get install -y g++
-
-    - name: Create project directory
-      run: mkdir -p ~/6MDrivecode
-
+      uses: actions/checkout@v4
+      
+    - name: Install Clang++
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y clang
+        
     - name: Change to project directory
-      run: cd ~/6MDrivecode
-
+      run: cd 6MDrivecode
+      
     - name: Build VEX C++ project
       run: |
-        g++ -o compthing 6MDrivecode/src/main.cpp 6MDrivecode/src/robot.cpp -I6MDrivecode/include -I/vexv5
+        clang++ -Ivexv5/include -I6MDrivecode/include 6MDrivecode/src/main.cpp 6MDrivecode/src/robot.cpp -o compthing vexv5/libv5rt.a -lstdc++ -lm -Tvexv5/lscript.ld
+        # Add additional compiler flags or linker options if needed
