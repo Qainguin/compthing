@@ -24,16 +24,19 @@
 using namespace vex;
 competition Compitition;
 
-//Set Up Motor Groups
-motor_group LDrive = motor_group(L1,L2,L3);
-motor_group RDrive = motor_group(R1,R2,R3);
-motor_group Allmotors = motor_group(L1,L2,L3,R1,R2,R3);
-//Driverain Variables
+// Set Up Motor Groups
+
+motor_group LDrive = motor_group(L1, L2, L3);
+motor_group RDrive = motor_group(R1, R2, R3);
+motor_group Allmotors = motor_group(L1, L2, L3, R1, R2, R3);
+
+// Driverain Variables
+
 int joystickMax = 97;
 int drivetrain = 0;
 int rumbleCount = 0;
-double wheelDiam = 3.25; //Wheel Size 
-double wheelSeperation = 11.17/2; //space between wheels devided by 2
+double wheelDiam = 3.25; // Wheel Size 
+double wheelSeperation = 11.17/2; // space between wheels devided by 2
 int autonDelay = 125;
 
 
