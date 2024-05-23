@@ -23,18 +23,10 @@ float drive_velocity = 0;
 // This function runs before the autonomous period.
 
 void pre_auton(void) {
-
-  // All activities that occur before the competition starts
-  // Example: clearing encoders, setting servo positions, ...
-
   robot.setStopping(brake);
 }
 
 void autonomous(void) {
-  // ..........................................................................
-  // Insert autonomous user code here.
-  // ..........................................................................
-
   drive(FULL_SPEED);
   wait(200, msec);
   reset();
@@ -45,15 +37,6 @@ void usercontrol(void) {
   autonomous();
 
   while (1) {
-    // This is the main execution loop for the user control program.
-    // Each time through the loop your program should update motor + servo
-    // values based on feedback from the joysticks.
-
-    // ........................................................................
-    // Insert user code here. This is where you use the joystick values to
-    // update your motors, etc.
-    // ........................................................................
-
     reset();
     drive(user.Axis3.position(pct));
     turn(user.Axis1.position(pct));
@@ -64,7 +47,7 @@ void usercontrol(void) {
 }
 
 //
-// Main will set up the competition functions and callbacks.
+// main will set up the competition functions and callbacks.
 //
 int main() {
   // Set up callbacks for autonomous and driver control periods.
